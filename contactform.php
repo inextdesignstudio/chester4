@@ -40,8 +40,8 @@
                     <li><a href="index.html">Homepage</a></li>
                     <li><a href="seasonguide.html">Seasonal Guide</a></li>
 					<li><a href="order.html">Place Order</a></li>
-                    <li><a href="freedelivery.html" class="current">Free Delivery</a></li>
-                  	<li><a href="payment.html">Payment</a></li>
+                    <li><a href="freedelivery.html">Free Delivery</a></li>
+                  	<li><a href="payment.html" class="current">Payment</a></li>
                   	<li><a href="contact.html">Contact Us</a></li>
 					            	</ul>
 			</div>
@@ -77,15 +77,57 @@
             
             <div id="templatemo_right_col">
             	<div class="templatemo_post_area">
-                	<p style="font-size:14px;font-weight:bold;">Call Kush for an order - 042 515 2281 or <a href="contactform.php">Enquire Now</a></p>
-                    <h1>Free Delivery Facility</h1>
-                    <p><span style="color:#F7941C;font-weight:bold;">Free Delivery Eligibility:</span> <br />
-                    We do free delivery in radius of 15km from Oakleigh as well for reasonable order or for our regular customers. If your delivery goods are small and far away then additional fees apply - please call Kush to enquire about additional fees.<br />
-                  <br /></p>    
-
-            
+                	<p style="font-size:14px;font-weight:bold;">Contact Form</p>
                    
-                </div>
+                  <p><?php if(!isset($_POST['submitform'])) { ?><div id="contactform-area">
+	<form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
+    <label for="Name">Name:</label>
+				<input type="text" name="name" id="Name" />
+				
+				<label for="Email">Email:</label>
+				<input type="text" name="email" id="Email" />
+	
+				<label for="Address">Address:</label>
+				<textarea name="address" id="Address" style="height:50px"/></textarea>
+				
+				<label for="Message">Message:</label><br />
+				<textarea name="message" rows="20" cols="20" id="Message"></textarea>
+
+				<input type="submit" name="submitform" value="Submit" class="submit-button" />
+			</form>
+		<div style="clear: both;"></div><?php }// end of if
+        else
+        {
+        $name = $_POST['name'];
+        $email = $_POST['email'];
+        $address = $_POST['address'];
+        $message = $_POST['message'];
+        
+        if(empty($name) or empty($address) or empty($message))
+        {
+        echo "Please go back and fill all required fields.";
+        exit;
+        }
+        
+        $body = "Name: ".$name."
+        \n Email: ".$email."
+        \n Address: ".$address."
+        \n Message: ".$message."
+        \n ";
+         
+        $to = "mail.chesterstfruitmarket@gmail.com";
+        $subject = "Enquiry from Website";
+        
+        $success = mail($to,$subject,$body);       
+        if($success)
+        echo "Thanks for contacting us. We will get back shortly";
+        else
+        echo "Could not send your email. Please try again later";
+        } //end of else
+        ?>
+
+    </p>        
+            	</div>
                 
                 <div class="templatemo_gallery">
                 	<div class="templatemo_title">
