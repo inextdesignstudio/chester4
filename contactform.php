@@ -172,12 +172,12 @@ $body .= "<br><b><u>Order Details</u></b>:
 <br> ".$order."
 <br>";
         
-echo $body;
+//echo $body;
  
         $to = "mail.chesterstfruitmarket@gmail.com";
         $subject = "Enquiry from Website";
         
-        //$success = mail($to,$subject,$body);       
+        $success = mail($to,$subject,$body);       
         if($success)
         echo "Thanks for contacting us. We will get back shortly";
         else
