@@ -30,6 +30,19 @@
 		}
 	});
 </script>
+
+<script src="jquery-1.10.2.min.js"></script>
+<script src="jquery-1.10.2.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("#add").click(function() {
+          $('#mytable tbody>tr:last').clone(true).insertAfter('#mytable tbody>tr:last');
+ $('#mytable tbody>tr:last #name').val('');
+ $('#mytable tbody>tr:last #age').val('');
+          return false;
+        });
+    });
+</script>
 </head>
 <body>
     <div id="templatemo_container">
@@ -81,19 +94,37 @@
                    
                   <p><?php if(!isset($_POST['submitform'])) { ?><div id="contactform-area">
 	<form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
-    <label for="Name">Name:</label>
+    <p>Fields marked with * are compulsory to be filled</p>
+    <label for="Name">Name:*</label>
 				<input type="text" name="name" id="Name" />
+                
+                <label for="Phone">Contact Phone:*</label>
+				<input type="text" name="phone" id="Phone" />
 				
-				<label for="Email">Email:</label>
+				<label for="Email">Email:*</label>
 				<input type="text" name="email" id="Email" />
 	
-				<label for="Address">Address:</label>
+				<label for="Address">Address:*</label>
 				<textarea name="address" id="Address" style="height:50px"/></textarea>
 				
 				<label for="Message">Message:</label><br />
 				<textarea name="message" rows="20" cols="20" id="Message"></textarea>
+                
+                 <table id="mytable" style="margin-left:110px" border="1" cellspacing="0" cellpadding="2">
+  <tbody>
+  <input type="button" style="width:120px;margin-left:110px" value="+Add Product" id="add"> (click on Add Product button to add more products to the order)
+    <tr>
+      <td>Product</td>
+<td>Qty</td>
+    </tr>
+    <tr class="order">
+      <td><input type="text" name="prod[]" id="name" style="width:330px" /></td>
+<td><input type="text" name="qty[]" id="age" style="width:130px"></td>
+    </tr> </tbody>
+  </table>
+    
 
-				<input type="submit" name="submitform" value="Submit" class="submit-button" />
+				<input type="submit" name="submitform" value="Submit Order" class="submit-button" />
 			</form>
 		<div style="clear: both;"></div><?php }// end of if
         else
@@ -102,23 +133,51 @@
         $email = $_POST['email'];
         $address = $_POST['address'];
         $message = $_POST['message'];
+		$phone = $_POST['phone'];
         
-        if(empty($name) or empty($address) or empty($message))
+        if(empty($name) or empty($phone) or empty($address) or empty($email))
         {
         echo "Please go back and fill all required fields.";
         exit;
         }
+		
+		if (!preg_match("/^[a-zA-Z ]*$/",$name)) {
+  echo "Invalid name. Only letters and white space allowed in name";
+  exit;
+}
+		
+		if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+  echo "Invalid email format";
+  exit;
+}
         
-        $body = "Name: ".$name."
-        \n Email: ".$email."
-        \n Address: ".$address."
-        \n Message: ".$message."
-        \n ";
-         
+        $body = "<b>Name:</b> ".$name."
+		<br><b>Phone:</b> ".$phone."
+        <br> <b>Email:</b> ".$email."
+        <br> <b>Address:</b> ".$address."
+        <br> <b>Message:</b> ".$message."
+        <br> ";
+		
+		$order = " ";
+$i = 0;
+
+foreach($_REQUEST['prod'] as $p)
+{
+$order .= "<b>Product Ordered:</b> ".$p.", <b>Quantity:</b> ".$_REQUEST['qty'][$i]."
+<br>";
+$i++;
+}
+
+$body .= "<br><b><u>Order Details</u></b>: 
+<br> ".$order."
+<br>";
+        
+echo $body;
+ 
         $to = "mail.chesterstfruitmarket@gmail.com";
         $subject = "Enquiry from Website";
         
-        $success = mail($to,$subject,$body);       
+        //$success = mail($to,$subject,$body);       
         if($success)
         echo "Thanks for contacting us. We will get back shortly";
         else

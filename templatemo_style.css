@@ -274,8 +274,12 @@ color:  #8D0B10;
 }
 
 #contactform-area input.submit-button {
-	width: 100px;
-	float: right;
+	width: 200px;
+	float: left;
+	margin-left:110px;
+	margin-top:15px;
+	background-color:#588526;
+	color:white;
 }
 
 label {
